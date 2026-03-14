@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>👵 El Consultorio de la Abu Graciela</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0a1a;--surface:#1a1530;--surface2:#231d3d;--surface3:#2d2550;
+  --pink:#ff6b9d;--purple:#c44dff;--yellow:#ffd93d;--green:#6bcb77;--red:#ff6b6b;
+  --text:#fff8f0;--muted:#b8a8d8;
+}
+html,body{width:100%;min-height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 40% at 50% 0%,rgba(196,77,255,0.18),transparent),radial-gradient(ellipse 40% 40% at 100% 100%,rgba(255,107,157,0.12),transparent);pointer-events:none;z-index:0}
+
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:0 20px 80px}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:32px 0 24px}
+.hero-tag{display:inline-block;background:rgba(255,107,157,0.12);border:1px solid rgba(255,107,157,0.25);border-radius:20px;padding:5px 16px;font-size:12px;color:var(--pink);font-weight:700;margin-bottom:18px;letter-spacing:.03em}
+.abu-float{font-size:80px;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+h1{font-family:'Fredoka One',cursive;font-size:clamp(28px,7vw,42px);line-height:1.15;margin-bottom:10px}
+h1 .pink{color:var(--pink)} h1 .yellow{color:var(--yellow)}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.7;max-width:420px;margin:0 auto 20px}
+.hero-sub strong{color:var(--text)}
+.tiktok-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--muted)}
+
+/* ── STEPS ── */
+.steps{display:flex;gap:0;margin:20px 0 28px;background:var(--surface);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.06)}
+.step-item{flex:1;text-align:center;padding:14px 8px;position:relative}
+.step-item:not(:last-child)::after{content:'›';position:absolute;right:-4px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--muted);z-index:1}
+.step-num{width:26px;height:26px;border-radius:50%;background:rgba(196,77,255,0.2);border:1px solid rgba(196,77,255,0.3);color:var(--purple);font-family:'Fredoka One',cursive;font-size:13px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+.step-text{font-size:10px;color:var(--muted);font-weight:700;line-height:1.3}
+
+/* ── FORM SCREENS ── */
+.screen{display:none}
+.screen.active{display:block;animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CAT GRID ── */
+.section-title{font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:6px;color:var(--yellow)}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.cat-card{background:var(--surface);border:2px solid rgba(255,255,255,0.07);border-radius:16px;padding:18px 12px;text-align:center;cursor:pointer;transition:all .2s}
+.cat-card:hover{border-color:rgba(196,77,255,0.4);transform:translateY(-2px)}
+.cat-card.selected{border-color:var(--pink);background:rgba(255,107,157,0.08)}
+.cat-emoji{font-size:34px;margin-bottom:8px}
+.cat-name{font-family:'Fredoka One',cursive;font-size:14px;color:var(--text)}
+.cat-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3}
+
+/* ── INPUT STYLES ── */
+.field{margin-bottom:18px}
+.field-label{font-size:13px;font-weight:800;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.field-input{width:100%;padding:14px 16px;border-radius:12px;border:2px solid rgba(255,255,255,0.08);background:var(--surface);color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
+.field-input:focus{border-color:var(--purple)}
+.field-input::placeholder{color:var(--muted);opacity:.5}
+textarea.field-input{resize:none;height:130px;line-height:1.6}
+.char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
+
+/* MOOD SELECTOR */
+.mood-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:4px}
+.mood-btn{background:var(--surface);border:2px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 6px;cursor:pointer;text-align:center;transition:all .2s;font-size:0}
+.mood-btn:hover{border-color:rgba(255,255,255,0.2);transform:scale(1.05)}
+.mood-btn.selected{border-color:var(--yellow);background:rgba(255,217,61,0.1)}
+.mood-emoji{font-size:26px;display:block;margin-bottom:4px}
+.mood-label{font-size:10px;color:var(--muted);font-weight:700;display:block}
+
+/* ANONYMOUS TOGGLE */
+.anon-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:12px;padding:14px 16px;margin-bottom:18px;border:1px solid rgba(255,255,255,0.06)}
+.anon-text{font-size:13px;color:var(--muted)}
+.anon-text strong{color:var(--text);display:block;font-size:14px}
+.toggle{width:44px;height:24px;background:rgba(255,255,255,0.1);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;border:none;flex-shrink:0}
+.toggle.on{background:var(--purple)}
+.toggle-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:left .2s}
+.toggle.on .toggle-dot{left:23px}
+
+/* ── BUTTONS ── */
+.btn-primary{background:linear-gradient(135deg,var(--pink),var(--purple));color:white;font-family:'Fredoka One',cursive;font-size:20px;border:none;border-radius:50px;padding:15px 40px;cursor:pointer;width:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 24px rgba(196,77,255,0.35);margin-bottom:10px}
+.btn-primary:active{transform:scale(.97)}
+.btn-secondary{background:transparent;color:var(--muted);font-family:'Fredoka One',cursive;font-size:15px;border:2px solid rgba(255,255,255,0.08);border-radius:50px;padding:11px 28px;cursor:pointer;width:100%;transition:all .2s}
+.btn-secondary:hover{border-color:var(--pink);color:var(--pink)}
+.btn-back{background:transparent;color:var(--muted);font-size:13px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;padding:8px 0;display:flex;align-items:center;gap:6px;margin-bottom:16px}
+.btn-back:hover{color:var(--text)}
+
+/* ── DONATE ── */
+.donate-section{background:linear-gradient(135deg,rgba(255,107,157,0.1),rgba(196,77,255,0.1));border:2px solid rgba(255,107,157,0.2);border-radius:18px;padding:22px;margin-bottom:14px}
+.donate-title{font-family:'Fredoka One',cursive;font-size:18px;color:var(--pink);margin-bottom:6px}
+.donate-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.amt-btn{background:var(--surface2);border:2px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;transition:all .2s}
+.amt-btn:hover,.amt-btn.sel{border-color:var(--yellow);background:rgba(255,217,61,0.08)}
+.amt-emoji{font-size:20px;margin-bottom:4px}
+.amt-price{font-family:'Fredoka One',cursive;font-size:14px;color:var(--yellow)}
+.amt-desc{font-size:10px;color:var(--muted);margin-top:2px}
+.amt-free{font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.5}
+.mp-btn{background:linear-gradient(135deg,#009ee3,#0070ba);color:white;font-family:'Fredoka One',cursive;font-size:17px;border:none;border-radius:50px;padding:13px 28px;cursor:pointer;width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s}
+.mp-btn:active{transform:scale(.97)}
+.skip-btn{background:transparent;color:var(--muted);font-size:13px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;width:100%;padding:8px;text-decoration:underline;text-underline-offset:3px}
+
+/* ── CONFIRM ── */
+.confirm-box{text-align:center;padding:20px 0}
+.confirm-emoji{font-size:72px;margin-bottom:16px;display:block;animation:float 2.5s ease-in-out infinite}
+.confirm-title{font-family:'Fredoka One',cursive;font-size:clamp(24px,6vw,34px);margin-bottom:10px;line-height:1.2}
+.confirm-msg{background:var(--surface);border:2px solid rgba(255,107,157,0.2);border-radius:16px;padding:18px;margin:16px 0;font-size:14px;color:var(--muted);line-height:1.7;font-style:italic}
+.confirm-msg strong{color:var(--yellow);font-style:normal;display:block;font-size:16px;margin-bottom:6px}
+.wa-btn{background:#25D366;color:white;font-family:'Fredoka One',cursive;font-size:18px;border:none;border-radius:50px;padding:14px 32px;cursor:pointer;width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s}
+.wa-btn:active{transform:scale(.97)}
+.tiktok-reminder{background:var(--surface);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:13px;color:var(--muted);line-height:1.6;text-align:center}
+.tiktok-reminder strong{color:var(--pink);display:block;margin-bottom:4px}
+
+/* PROGRESS */
+.progress-dots{display:flex;justify-content:center;gap:8px;margin-bottom:24px}
+.pdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .3s}
+.pdot.active{background:var(--pink);width:24px;border-radius:4px}
+.pdot.done{background:var(--purple)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:10px 24px;font-size:14px;font-weight:700;transition:transform .3s;z-index:100;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">📱 Visto en @abugraciela · TikTok</div>
+    <span class="abu-float">👵</span>
+    <h1>El <span class="pink">Consultorio</span><br>de la <span class="yellow">Abu Graciela</span></h1>
+    <p class="hero-sub">¿Tenés un problema y no sabés qué hacer? <strong>Contáselo a la Abu.</strong> Ella lo leyó todo en las novelas — y tiene la respuesta que nadie más te va a dar.</p>
+    <div class="tiktok-pill">📱 @abugraciela &nbsp;·&nbsp; Seguila en TikTok</div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="step-item"><div class="step-num">1</div><div class="step-text">Elegí tu drama</div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-text">Contá todo</div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-text">Apoyá a la Abu</div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-text">Esperá en TikTok</div></div>
+  </div>
+
+  <!-- PROGRESS DOTS -->
+  <div class="progress-dots" id="prog-dots">
+    <div class="pdot active" id="dot-0"></div>
+    <div class="pdot" id="dot-1"></div>
+    <div class="pdot" id="dot-2"></div>
+    <div class="pdot" id="dot-3"></div>
+  </div>
+
+  <!-- ══ SCREEN 0: CATEGORY ══ -->
+  <div class="screen active" id="s0">
+    <div class="section-title">¿Cuál es tu drama? 🎭</div>
+    <div class="section-sub">La Abu atiende todo. Elegí la categoría que más te representa y empezamos.</div>
+    <div class="cat-grid">
+      <div class="cat-card" id="cat-amor" onclick="selectCat('amor')">
+        <div class="cat-emoji">💔</div>
+        <div class="cat-name">Amor y relaciones</div>
+        <div class="cat-desc">Ex, pareja, crush, celos...</div>
+      </div>
+      <div class="cat-card" id="cat-familia" onclick="selectCat('familia')">
+        <div class="cat-emoji">👨‍👩‍👧</div>
+        <div class="cat-name">Drama familiar</div>
+        <div class="cat-desc">Suegra, cuñado, mamá...</div>
+      </div>
+      <div class="cat-card" id="cat-trabajo" onclick="selectCat('trabajo')">
+        <div class="cat-emoji">💸</div>
+        <div class="cat-name">Trabajo y plata</div>
+        <div class="cat-desc">Jefe, plata, decisiones...</div>
+      </div>
+      <div class="cat-card" id="cat-amistad" onclick="selectCat('amistad')">
+        <div class="cat-emoji">🗡️</div>
+        <div class="cat-name">Amistad y traiciones</div>
+        <div class="cat-desc">Amigos tóxicos, envidia...</div>
+      </div>
+      <div class="cat-card" id="cat-vida" onclick="selectCat('vida')" style="grid-column:span 2">
+        <div class="cat-emoji">🤔</div>
+        <div class="cat-name">Decisiones de vida</div>
+        <div class="cat-desc">No sé qué hacer con mi vida... (la Abu también lo entiende)</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goTo(1)" id="btn-cat" style="opacity:.5" disabled>Seguir con mi drama ➡️</button>
+  </div>
+
+  <!-- ══ SCREEN 1: FORM ══ -->
+  <div class="screen" id="s1">
+    <button class="btn-back" onclick="goTo(0)">← Volver</button>
+    <div class="section-title">Contale todo a la Abu 📝</div>
+    <div class="section-sub">No te guardes nada. La Abu vio cosas peores en las novelas.</div>
+
+    <div class="field">
+      <div class="field-label">¿Cómo te llamás? <span style="color:var(--muted);font-size:11px">(o inventá un apodo)</span></div>
+      <input class="field-input" id="f-name" type="text" placeholder="Mi nombre es..." maxlength="30">
+    </div>
+
+    <div class="field">
+      <div class="field-label">¿De dónde nos escribís? 🌍</div>
+      <input class="field-input" id="f-pais" type="text" placeholder="Argentina, España, México..." maxlength="40">
+    </div>
+
+    <div class="field">
+      <div class="field-label">¿Cómo te sentís con todo esto?</div>
+      <div class="mood-grid">
+        <button class="mood-btn" onclick="selectMood('😭','Llorando')"><span class="mood-emoji">😭</span><span class="mood-label">Llorando</span></button>
+        <button class="mood-btn" onclick="selectMood('😤','Enojado/a')"><span class="mood-emoji">😤</span><span class="mood-label">Enojado/a</span></button>
+        <button class="mood-btn" onclick="selectMood('😕','Confundido')"><span class="mood-emoji">😕</span><span class="mood-label">Confundido</span></button>
+        <button class="mood-btn" onclick="selectMood('😂','Me río')"><span class="mood-emoji">😂</span><span class="mood-label">Me río</span></button>
+        <button class="mood-btn" onclick="selectMood('🤯','Explotando')"><span class="mood-emoji">🤯</span><span class="mood-label">Explotando</span></button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Contá tu situación completa 👇</div>
+      <textarea class="field-input" id="f-problema" placeholder="Bueno Abu, resulta que..." maxlength="600" oninput="updateChar()"></textarea>
+      <div class="char-count"><span id="char-n">0</span>/600</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">¿Qué tipo de consejo necesitás?</div>
+      <select class="field-input" id="f-tipo" style="cursor:pointer">
+        <option value="">Elegí una opción...</option>
+        <option value="directo">🎯 Decime la verdad aunque duela</option>
+        <option value="suave">🤗 Consolame un poco, Abu</option>
+        <option value="gracioso">😂 Haceme reír con esto</option>
+        <option value="novela">📺 Compará con una novela</option>
+      </select>
+    </div>
+
+    <div class="anon-row">
+      <div class="anon-text">
+        <strong>Quiero que la Abu lo cuente en TikTok</strong>
+        ¡Que todo el mundo opine! (sin datos personales)
+      </div>
+      <button class="toggle on" id="tiktok-toggle" onclick="toggleTiktok()">
+        <div class="toggle-dot"></div>
+      </button>
+    </div>
+
+    <button class="btn-primary" onclick="goTo(2)">¡La Abu ya me está esperando! 👵</button>
+  </div>
+
+  <!-- ══ SCREEN 2: DONATE ══ -->
+  <div class="screen" id="s2">
+    <button class="btn-back" onclick="goTo(1)">← Volver</button>
+
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:52px;margin-bottom:10px">👵💕</div>
+      <div class="section-title">¡La Abu ya leyó todo!</div>
+      <div class="section-sub">Está preparando su respuesta. Mientras tanto, ¿le invitás un cafecito para que siga con energía?</div>
+    </div>
+
+    <div class="donate-section">
+      <div class="donate-title">☕ Apoyá a la Abu</div>
+      <div class="donate-sub">Cada cafecito ayuda a la Abu Graciela a seguir creando contenido con todo el amor del mundo. No es obligatorio — pero ella se acuerda de quienes la apoyan 😉</div>
+
+      <div class="amounts">
+        <div class="amt-btn sel" id="a1" onclick="selAmt(1)">
+          <div class="amt-emoji">☕</div>
+          <div class="amt-price">$500</div>
+          <div class="amt-desc">Cafecito</div>
+        </div>
+        <div class="amt-btn" id="a2" onclick="selAmt(2)">
+          <div class="amt-emoji">🍰</div>
+          <div class="amt-price">$1.000</div>
+          <div class="amt-desc">Café y torta</div>
+        </div>
+        <div class="amt-btn" id="a3" onclick="selAmt(3)">
+          <div class="amt-emoji">🎂</div>
+          <div class="amt-price">$2.000</div>
+          <div class="amt-desc">Fiesta entera</div>
+        </div>
+      </div>
+
+      <button class="mp-btn" onclick="doMP()">
+        <span style="font-size:20px">💙</span> Pagar con Mercado Pago
+      </button>
+
+      <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 14px;margin-top:8px;font-size:12px;color:var(--muted);line-height:1.7">
+        <strong style="color:var(--text);display:block;margin-bottom:4px">🌍 ¿Estás desde otro país?</strong>
+        Alias MercadoPago: <strong style="color:var(--yellow)">gracielammedrano</strong><br>
+        ¿Querés transferir desde España u otro país? Escribile directamente a la Abu por WhatsApp y ella te da los datos 💕
+      </div>
+    </div>
+
+    <div class="amt-free">La consulta es <strong style="color:var(--green)">100% gratis</strong>.<br>El cafecito es opcional pero muy valorado 🙏</div>
+    <button class="skip-btn" onclick="goTo(3)">Enviar consulta sin donar →</button>
+  </div>
+
+  <!-- ══ SCREEN 3: CONFIRM ══ -->
+  <div class="screen" id="s3">
+    <div class="confirm-box">
+      <span class="confirm-emoji">👵✉️</span>
+      <div class="confirm-title" id="confirm-title">¡Tu consulta llegó<br>al consultorio!</div>
+
+      <div class="confirm-msg">
+        <strong id="confirm-abu-msg">— La Abu Graciela</strong>
+        <span id="confirm-text"></span>
+      </div>
+
+      <button class="wa-btn" onclick="sendWA()">
+        <span style="font-size:22px">💬</span> Enviar por WhatsApp a la Abu
+      </button>
+
+      <div class="tiktok-reminder">
+        <strong>📱 Seguí a @abugraciela en TikTok</strong>
+        La respuesta a tu consulta puede aparecer en cualquier momento. Activá las notificaciones para no perderte nada 🔔
+      </div>
+
+      <div style="margin-top:16px;text-align:center">
+        <button class="btn-secondary" onclick="location.reload()" style="width:auto;padding:10px 28px">Nueva consulta 🔄</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let selectedCat='';
+let selectedMood='';
+let selectedAmt=1;
+let tiktokOk=true;
+
+const ABU_MSGS={
+  amor:['"Ay, el amor... lo vi mil veces en las novelas y siempre termina igual. Escuchame bien."','"¿Problemas del corazón? La Abu tuvo los suyos también. Vení, contame todo."'],
+  familia:['"La familia es lo primero... pero a veces la familia es lo primero en darte un dolor de cabeza."','"Ay, los dramas de familia. La Abu los conoce todos. ¡Todo pasa, mi amor!"'],
+  trabajo:['"El trabajo y la plata... temas serios. La Abu también tuvo que rebuscársela en su momento."','"¿Problemas con la plata o el trabajo? Respira. Vamos a ver qué dice la Abu."'],
+  amistad:['"Las traiciones duelen más que el amor. La Abu lo sabe bien. Contame todo."','"Amigos... como en las novelas: los que más querés a veces son los que más te sorprenden."'],
+  vida:['"¿No sabés qué hacer con tu vida? Bienvenido al club, mi amor. Todos pasamos por ahí."','"Las grandes decisiones de la vida... para eso estoy yo. La Abu ya vio mucho."'],
+};
+
+function selectCat(cat){
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('cat-'+cat).classList.add('selected');
+  selectedCat=cat;
+  const btn=document.getElementById('btn-cat');
+  btn.disabled=false; btn.style.opacity='1';
+}
+
+function selectMood(emoji,label){
+  selectedMood=emoji+' '+label;
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function toggleTiktok(){
+  tiktokOk=!tiktokOk;
+  const t=document.getElementById('tiktok-toggle');
+  t.classList.toggle('on',tiktokOk);
+}
+
+function selAmt(n){
+  [1,2,3].forEach(i=>document.getElementById('a'+i).classList.remove('sel'));
+  document.getElementById('a'+n).classList.add('sel');
+  selectedAmt=n;
+}
+
+function updateChar(){
+  const v=document.getElementById('f-problema').value.length;
+  document.getElementById('char-n').textContent=v;
+}
+
+function goTo(n){
+  if(n===1){
+    if(!selectedCat){showToast('Elegí una categoría primero 👆');return;}
+  }
+  if(n===2){
+    const name=document.getElementById('f-name').value.trim();
+    const prob=document.getElementById('f-problema').value.trim();
+    if(!name){showToast('¡Decile tu nombre a la Abu! 👵');return;}
+    if(prob.length<20){showToast('Contale más a la Abu... ¡se merece los detalles! 📝');return;}
+  }
+  if(n===3) buildConfirm();
+
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  document.querySelectorAll('.pdot').forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i<n) d.classList.add('done');
+    else if(i===n) d.classList.add('active');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildConfirm(){
+  const name=document.getElementById('f-name').value.trim()||'Amigo/a';
+  const msgs=ABU_MSGS[selectedCat]||ABU_MSGS.vida;
+  const msg=msgs[Math.floor(Math.random()*msgs.length)];
+  document.getElementById('confirm-title').innerHTML=`¡Listo, <span style="color:var(--yellow)">${name}</span>!<br>La Abu recibió tu consulta 👵✉️`;
+  document.getElementById('confirm-abu-msg').textContent=msg;
+  document.getElementById('confirm-text').textContent=' Tu consulta está en camino. Seguí a @abugraciela en TikTok y activá las notificaciones — ¡tu respuesta puede aparecer en cualquier momento!';
+}
+
+function sendWA(){
+  const name=document.getElementById('f-name').value.trim()||'Anónimo/a';
+  const pais=document.getElementById('f-pais').value.trim()||'no especificó';
+  const prob=document.getElementById('f-problema').value.trim();
+  const tipo=document.getElementById('f-tipo').value;
+  const catNames={amor:'💔 Amor y relaciones',familia:'👨‍👩‍👧 Drama familiar',trabajo:'💸 Trabajo y plata',amistad:'🗡️ Amistad y traiciones',vida:'🤔 Decisiones de vida'};
+  const tipoNames={directo:'Quiere la verdad aunque duela',suave:'Necesita que la consolen',gracioso:'Quiere reírse con esto',novela:'Quiere que lo comparen con una novela','':"No especificó"};
+
+  const txt=`👵 NUEVA CONSULTA AL CONSULTORIO 👵\n\n`+
+    `👤 Nombre: ${name}\n`+
+    `🌍 País: ${pais}\n`+
+    `🎭 Categoría: ${catNames[selectedCat]||selectedCat}\n`+
+    `${selectedMood?`😶 Estado: ${selectedMood}\n`:''}`+
+    `💬 Tipo de consejo: ${tipoNames[tipo]}\n`+
+    `📺 Contar en TikTok: ${tiktokOk?'SÍ, lo autoriza ✅':'No, prefiere privado 🔒'}\n\n`+
+    `📝 CONSULTA:\n${prob}\n\n`+
+    `─────────────────\n`+
+    `Enviado desde El Consultorio de la Abu Graciela 🎪`;
+
+  window.open(`https://wa.me/+549?text=${encodeURIComponent(txt)}`,'_blank');
+  showToast('¡Consulta lista para enviar a la Abu! 💌');
+}
+
+function doMP(){
+  window.open('https://link.mercadopago.com.ar/gracielammedrano','_blank');
+  showToast('¡Gracias por apoyar a la Abu! ☕💕');
+  setTimeout(()=>goTo(3),1500);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>
